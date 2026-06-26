@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Janice Snack Stop | Naivasha's Best Snacks</title>
+  <meta name="description" content="Fresh snacks, hot mandazis, samosas, chapatis and cold drinks in Naivasha. Order directly on WhatsApp from Janice Snack Stop. Fast delivery & M-Pesa ready.">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #fef9f0;
+      color: #2d2418;
+      scroll-behavior: smooth;
+    }
+
+    :root {
+      --primary: #f97316;
+      --primary-dark: #ea580c;
+      --primary-soft: #ffedd5;
+      --secondary: #2dd4bf;
+      --secondary-dark: #0d9488;
+      --whatsapp: #25D366;
+      --shadow-sm: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.02);
+      --shadow-md: 0 20px 25px -12px rgba(0,0,0,0.08);
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .cart-fixed {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--primary);
+      color: white;
+      padding: 14px 22px;
+      border-radius: 60px;
+      font-weight: 700;
+      z-index: 1001;
+      cursor: pointer;
+      box-shadow: 0 12px 24px -8px rgba(249,115,22,0.4);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1rem;
+      border: none;
+      transition: all 0.25s ease;
+    }
+
+    .cart-fixed:hover {
+      background: var(--primary-dark);
+      transform: scale(1.02);
+    }
+
+    .cart-popup {
+      display: none;
+      position: fixed;
+      top: 80px;
+      right: 24px;
+      background: white;
+      width: 400px;
+      max-width: calc(100vw - 40px);
+      padding: 24px;
+      border-radius: 32px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+      z-index: 1002;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .cart-popup h3 {
+      font-size: 1.7rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #cart-items {
+      max-height: 280px;
+      overflow-y: auto;
+      margin: 12px 0;
+    }
+
+    .cart-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #f3e6d5;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .cart-item-info {
+      font-weight: 600;
+      flex: 2;
+    }
+
+    .qty-controls {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fef3e8;
+      padding: 4px 12px;
+      border-radius: 50px;
+    }
+
+    .qty-btn {
+      background: white;
+      border: none;
+      font-size: 1.2rem;
+      width: 28px;
+      height: 28px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      color: var(--primary);
+    }
+
+    .remove-item {
+      background: none;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      color: #b91c1c;
+      opacity: 0.7;
+    }
+
+    .customer-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 20px 0 12px;
+    }
+
+    .customer-form input, .customer-form textarea {
+      padding: 12px 16px;
+      border: 1px solid #ffe2c6;
+      border-radius: 60px;
+      font-size: 0.9rem;
+      background: #fffbf5;
+    }
+
+    .checkout-btn {
+      background: var(--whatsapp);
+      color: white;
+      padding: 14px;
+      width: 100%;
+      border: none;
+      border-radius: 60px;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .hero-modern {
+      background: linear-gradient(120deg, #ffedd5 0%, #ffe4c4 100%);
+      padding: 80px 0 60px;
+      border-bottom-left-radius: 48px;
+      border-bottom-right-radius: 48px;
+    }
+
+    .hero-grid {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .hero-text {
+      flex: 1;
+    }
+
+    .hero-text .badge {
+      background: var(--secondary);
+      color: #1f423b;
+      display: inline-block;
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      margin-bottom: 20px;
+    }
+
+    .hero-text h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      background: linear-gradient(135deg, #e65c00, #f9a826);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      margin-bottom: 20px;
+    }
+
+    .hero-text p {
+      font-size: 1.2rem;
+      color: #4a3a2a;
+      margin-bottom: 30px;
+    }
+
+    .hero-image {
+      flex: 1;
+      text-align: center;
+    }
+
+    .hero-image img {
+      max-width: 100%;
+      border-radius: 48px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-whatsapp-big {
+      background: #25D366;
+      color: white;
+      padding: 14px 32px;
+      border-radius: 60px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .section-head {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .section-head span {
+      background: #ffedd5;
+      color: var(--primary-dark);
+      padding: 6px 18px;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: inline-block;
+      margin-bottom: 12px;
+    }
+
+    .section-head h2 {
+      font-size: 2.4rem;
+      font-weight: 800;
+      color: #2d2418;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 32px;
+    }
+
+    .menu-card {
+      background: white;
+      border-radius: 36px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid #fce8d6;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 30px 40px -20px rgba(0,0,0,0.15);
+    }
+
+    .menu-img {
+      width: 100%;
+      height: 190px;
+      object-fit: cover;
+    }
+
+    .menu-info {
+      padding: 20px;
+    }
+
+    .price-tag {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .add-btn {
+      background: var(--primary);
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 60px;
+      color: white;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+      margin-top: 14px;
+    }
+
+    .steps-flex {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .step-card {
+      background: white;
+      padding: 30px 20px;
+      border-radius: 48px;
+      flex: 1;
+      min-width: 200px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .review-section {
+      background: #fff4e8;
+      padding: 70px 0;
+    }
+
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .review-card {
+      background: white;
+      padding: 24px;
+      border-radius: 32px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .review-card .stars {
+      color: #fbbf24;
+      margin-bottom: 12px;
+    }
+
+    .add-review-form {
+      background: white;
+      padding: 30px;
+      border-radius: 48px;
+      box-shadow: var(--shadow-sm);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid #ffe2c6;
+      border-radius: 40px;
+      font-family: 'Inter', sans-serif;
+      background: #fffbf5;
+    }
+
+    .form-group textarea {
+      border-radius: 24px;
+      resize: vertical;
+    }
+
+    .submit-review {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 60px;
+      font-weight: bold;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .contact-card {
+      background: white;
+      border-radius: 40px;
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    footer {
+      background: #1e1914;
+      color: #e7d8c4;
+      text-align: center;
+      padding: 48px 24px;
+      border-top-left-radius: 48px;
+      border-top-right-radius: 48px;
+      margin-top: 40px;
+    }
+
+    .footer-creator {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #3a2c1e;
+      font-size: 0.9rem;
+    }
+
+    .footer-creator a {
+      color: #f97316;
+      text-decoration: none;
+    }
+
+    .sticky-wa {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      background: #25D366;
+      color: white;
+      padding: 14px 18px;
+      border-radius: 50px;
+      z-index: 999;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: bold;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    /* image instruction note */
+    .image-instruction {
+      background: #fffbeb;
+      border-left: 4px solid #f97316;
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      font-size: 0.95rem;
+      color: #5a4a30;
+    }
+
+    .image-instruction code {
+      background: #f1e5d3;
+      padding: 2px 10px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: #b85e0a;
+    }
+
+    @media (max-width: 768px) {
+      .hero-text h1 { font-size: 2.4rem; }
+      .cart-fixed { bottom: 18px; right: 18px; padding: 10px 18px;}
+    }
+  </style>
+</head>
+<body>
+
+<button class="cart-fixed" onclick="toggleCart()">
+  <i class="fas fa-shopping-basket"></i> <span id="cart-count">0</span> items
+</button>
+
+<div class="cart-popup" id="cartPopup">
+  <h3><i class="fas fa-receipt"></i> Your basket</h3>
+  <div id="cart-items"></div>
+  <div class="cart-total" style="font-size:1.4rem; font-weight:800; border-top:2px solid #fbe3cf; padding-top:14px;">
+    Total: KSh <span id="total">0</span>
+  </div>
+  <div class="customer-form">
+    <input type="text" id="custName" placeholder="Full name *">
+    <input type="tel" id="custPhone" placeholder="Phone number *">
+    <input type="text" id="custLocation" placeholder="Delivery location / Pickup">
+    <textarea id="custNotes" rows="2" placeholder="Extra notes..."></textarea>
+  </div>
+  <button class="checkout-btn" onclick="checkoutWhatsApp()">
+    <i class="fab fa-whatsapp"></i> Order via WhatsApp
+  </button>
+  <p style="font-size:12px; text-align:center; margin-top:12px;">M-Pesa Till: 5415674</p>
+</div>
+
+<section class="hero-modern">
+  <div class="container hero-grid">
+    <div class="hero-text">
+      <div class="badge"><i class="fas fa-pepper-hot"></i> Since 2020</div>
+      <h1>Janice Snack Stop <br> Taste the real Naivasha</h1>
+      <p>Hot mandazis, crunchy samosas, chapati, smokies and ice-cold drinks. Order in seconds via WhatsApp.</p>
+      <a href="https://wa.me/254769927084" target="_blank" class="btn-whatsapp-big"><i class="fab fa-whatsapp"></i> Order Now</a>
+    </div>
+    <div class="hero-image">
+      <img src="delicious snacks.jpg" alt="delicious snacks">
+    </div>
+  </div>
+</section>
+
+<section style="padding: 60px 0;">
+  <div class="container">
+    <div class="section-head">
+      <span>flavor explosion</span>
+      <h2>Our signature menu</h2>
+    </div>
+    
+    <!-- INSTRUCTION NOTE FOR IMAGES -->
+    <div class="image-instruction">
+      <i class="fas fa-image" style="color: #f97316; margin-right: 12px;"></i>
+      <strong>📸 How to add your own images:</strong> Open the JavaScript section below and find the <code>fullMenu</code> array. Replace the <code>img: "your-image.jpg"</code> with your actual image filenames (e.g., <code>img: "fried-chicken.jpg"</code>). Make sure the images are in the same folder as this HTML file.
+    </div>
+
+    <div class="menu-grid" id="menuGrid"></div>
+  </div>
+</section>
+
+<section style="background: #fff4e8; padding: 70px 0;">
+  <div class="container">
+    <div class="section-head">
+      <span>simple process</span>
+      <h2>How to get your snacks</h2>
+    </div>
+    <div class="steps-flex">
+      <div class="step-card"><i class="fas fa-plus-circle" style="font-size: 2.5rem; color: var(--primary);"></i><h3 style="margin: 15px 0;">1. Add to cart</h3><p>Pick your favorites</p></div>
+      <div class="step-card"><i class="fab fa-whatsapp" style="font-size: 2.5rem; color: #25D366;"></i><h3 style="margin: 15px 0;">2. Checkout</h3><p>Share your order via WhatsApp</p></div>
+      <div class="step-card"><i class="fas fa-moped" style="font-size: 2.5rem; color: var(--secondary);"></i><h3 style="margin: 15px 0;">3. Fast delivery</h3><p>Fresh and hot, right to you</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="review-section">
+  <div class="container">
+    <div class="section-head">
+      <span>customer voices</span>
+      <h2>What our customers say</h2>
+    </div>
+    <div id="reviewsContainer" class="review-grid"></div>
+    <div class="add-review-form">
+      <h3><i class="far fa-star"></i> Share your experience</h3>
+      <div class="form-group">
+        <input type="text" id="reviewerName" placeholder="Your name">
+      </div>
+      <div class="form-group">
+        <select id="reviewStars">
+          <option value="5">5 Stars - Excellent</option>
+          <option value="4">4 Stars - Very Good</option>
+          <option value="3">3 Stars - Good</option>
+          <option value="2">2 Stars - Fair</option>
+          <option value="1">1 Star - Poor</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <textarea id="reviewText" rows="3" placeholder="Write your review..."></textarea>
+      </div>
+      <button class="submit-review" onclick="addNewReview()">Submit Review</button>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 0 0 70px 0;">
+  <div class="container">
+    <div class="section-head">
+      <span>find us</span>
+      <h2>Come and taste the joy</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-card">
+        <i class="fas fa-map-pin" style="font-size: 2rem; color: var(--primary);"></i>
+        <h3 style="margin: 12px 0;">Janice Snack Stop</h3>
+        <p>Moi South Lake Road, Karagita, Naivasha<br>Inside South Lake Club Area</p>
+        <p>Open Daily: 7:00 AM - 9:00 PM</p>
+        <div style="background:#fbead5; border-radius: 40px; padding: 16px; margin: 18px 0;">
+          <i class="fas fa-phone-alt"></i> Call: <strong>+254 769 927084</strong><br>
+          <i class="fas fa-coins"></i> M-Pesa Till: <strong>5415674</strong>
+        </div>
+        <a href="https://wa.me/254769927084" class="btn-whatsapp-big" style="background:#25D366; display: inline-flex; padding: 12px 24px;">Chat on WhatsApp</a>
+      </div>
+      <div class="contact-card">
+        <h3><i class="fas fa-map-marked-alt"></i> Exact location</h3>
+        <iframe src="https://maps.google.com/maps?q=South+Lake+Club,+Karagita,+Naivasha&z=15&output=embed" width="100%" height="240" style="border-radius: 28px; border:0;" allowfullscreen="" loading="lazy"></iframe>
+        <p style="margin-top: 14px;"><a href="https://maps.app.goo.gl/CgNE3xwJRRfQaLJQ9" target="_blank" style="color: var(--primary);">Open in Google Maps</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <h3><i class="fas fa-utensils"></i> Janice Snack Stop</h3>
+  <p>Fresh Snacks • Hot Chapatis • Cold Drinks • Naivasha's favorite corner</p>
+  <div class="footer-creator">
+    Created by Denis | WhatsApp: <a href="https://wa.me/2540703134309" target="_blank">0703134309</a>
+  </div>
+  <p style="margin-top: 16px; font-size: 0.8rem;">2026 - Taste the love, support local</p>
+</footer>
+
+<a class="sticky-wa" href="https://wa.me/254769927084" target="_blank">
+  <i class="fab fa-whatsapp"></i> <span>WhatsApp</span>
+</a>
+
+<script>
+  // ============================================================
+  // 📸 EASILY ADD YOUR OWN IMAGES - Replace the "img" values below
+  // with your actual image filenames (e.g., "fried-chicken.jpg")
+  // Make sure images are in the same folder as this HTML file.
+  // ============================================================
+  const fullMenu = [
+    { name: "Fried Chicken", price: 100, img: "fried chicken.jpg" },
+    { name: "Pilau", price: 150, img: "pilau.jpg" },
+    { name: "Chapati", price: 20, img: "chapati.jpg" },
+    { name: "Samosa", price: 20, img: "samosa.jpg" },
+    { name: "Plain Chips", price: 100, img: "chips.jpg" },
+    { name: "Beef Smokie", price: 50, img: "beef smokie.jpg" },
+    { name: "Fruit Salad", price: 150, img: "fruit salad.jpg" },
+    { name: "Smocha", price: 80, img: "smocha.jpg" },
+    { name: "Beef Sausage", price: 40, img: "beef sausage.jpg" },
+    { name: "Coke 500ml", price: 50, img: "coke 500ml.jpg" },
+    { name: "Fanta Orange", price: 50, img: "fanta orange.jpg" },
+    { name: "Fanta Passion", price: 50, img: "fanta passion.jpg" }
+  ];
+
+  let cart = [];
+  
+  function loadCart() { 
+    const s = localStorage.getItem("janiceCart"); 
+    if(s) { 
+      try{ cart = JSON.parse(s); } catch(e){} 
+    } 
+    updateCartUI(); 
+  }
+  
+  function saveCart() { 
+    localStorage.setItem("janiceCart", JSON.stringify(cart)); 
+  }
+  
+  function addItem(name, price) { 
+    let ex = cart.find(i => i.name === name); 
+    if(ex) ex.qty += 1; 
+    else cart.push({ name, price, qty: 1 }); 
+    saveCart(); 
+    updateCartUI(); 
+  }
+  
+  function changeQty(name, delta) { 
+    let idx = cart.findIndex(i => i.name === name); 
+    if(idx !== -1){ 
+      let newQty = cart[idx].qty + delta; 
+      if(newQty <= 0) cart.splice(idx,1); 
+      else cart[idx].qty = newQty; 
+      saveCart(); 
+      updateCartUI(); 
+    } 
+  }
+  
+  function removeItemCompletely(name) { 
+    cart = cart.filter(i => i.name !== name); 
+    saveCart(); 
+    updateCartUI(); 
+  }
+  
+  function updateCartUI() {
+    let totalItems = 0, totalPrice = 0, html = "";
+    cart.forEach(item => { totalItems += item.qty; totalPrice += item.price * item.qty; });
+    document.getElementById("cart-count").innerText = totalItems;
+    document.getElementById("total").innerText = totalPrice;
+    if(cart.length===0) html = '<p style="text-align:center;">Basket empty, add some snacks!</p>';
+    else cart.forEach(item => {
+      html += `<div class="cart-row"><div class="cart-item-info">${escapeHtml(item.name)}</div><div class="qty-controls"><button class="qty-btn" onclick="changeQty('${escapeHtml(item.name)}', -1)">-</button><span>${item.qty}</span><button class="qty-btn" onclick="changeQty('${escapeHtml(item.name)}', 1)">+</button><button class="remove-item" onclick="removeItemCompletely('${escapeHtml(item.name)}')"><i class="fas fa-trash-alt"></i></button></div><div>KSh ${item.price * item.qty}</div></div>`;
+    });
+    document.getElementById("cart-items").innerHTML = html;
+  }
+  
+  function toggleCart() { 
+    let p = document.getElementById("cartPopup"); 
+    p.style.display = p.style.display === "block" ? "none" : "block"; 
+  }
+  
+  function escapeHtml(s) { 
+    return s.replace(/[&<>]/g, function(m){
+      if(m==='&') return '&amp;'; 
+      if(m==='<') return '&lt;'; 
+      if(m==='>') return '&gt;'; 
+      return m;
+    }); 
+  }
+
+  function checkoutWhatsApp() {
+    if(cart.length === 0) { 
+      alert("Your cart is empty! Add some snacks first."); 
+      return; 
+    }
+    
+    let name = document.getElementById("custName").value.trim();
+    let phone = document.getElementById("custPhone").value.trim();
+    let location = document.getElementById("custLocation").value.trim() || "Pickup";
+    let notes = document.getElementById("custNotes").value.trim() || "None";
+    
+    if(!name || !phone) { 
+      alert("Please enter your name and phone number to continue."); 
+      return; 
+    }
+    
+    localStorage.setItem("custName", name);
+    localStorage.setItem("custPhone", phone);
+    
+    let message = "";
+    message += "JANICE SNACK STOP - NEW ORDER\n\n";
+    message += "Customer: " + name + "\n";
+    message += "Phone: " + phone + "\n";
+    message += "Location: " + location + "\n";
+    message += "Notes: " + notes + "\n\n";
+    message += "ORDER SUMMARY:\n";
+    
+    let orderTotal = 0;
+    cart.forEach(item => {
+      const subtotal = item.price * item.qty;
+      orderTotal += subtotal;
+      message += "- " + item.qty + "x " + item.name + " = KSh " + subtotal + "\n";
+    });
+    
+    message += "\nTOTAL: KSh " + orderTotal + "\n";
+    message += "M-Pesa Till: 5415674\n\n";
+    message += "Thank you for choosing Janice Snack Stop!";
+    
+    const encodedMsg = encodeURIComponent(message);
+    const whatsappUrl = "https://wa.me/254769927084?text=" + encodedMsg;
+    
+    window.open(whatsappUrl, '_blank');
+  }
+
+  function renderMenu() {
+    const container = document.getElementById("menuGrid");
+    let html = "";
+    fullMenu.forEach(item => {
+      html += `<div class="menu-card"><img class="menu-img" src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/300x190?text=Image+Not+Found'"><div class="menu-info"><h3>${escapeHtml(item.name)}</h3><div class="price-tag">KSh ${item.price}</div><button class="add-btn" onclick="addItem('${escapeHtml(item.name)}', ${item.price})"><i class="fas fa-cart-plus"></i> Add to cart</button></div></div>`;
+    });
+    container.innerHTML = html;
+  }
+
+  let reviews = [];
+
+  function loadReviews() {
+    const stored = localStorage.getItem("janiceReviews");
+    if(stored) {
+      try { reviews = JSON.parse(stored); } catch(e) { reviews = []; }
+    }
+    renderReviews();
+  }
+
+  function renderReviews() {
+    const container = document.getElementById("reviewsContainer");
+    if(!container) return;
+    if(reviews.length === 0) {
+      container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:40px; background:#fff0e0; border-radius:48px;">No reviews yet. Be the first to share your experience!</div>`;
+      return;
+    }
+    let html = "";
+    reviews.forEach((rev) => {
+      let starDisplay = "";
+      for(let i=1; i<=5; i++) {
+        starDisplay += i <= rev.stars ? "★" : "☆";
+      }
+      html += `
+        <div class="review-card">
+          <div class="stars">${starDisplay}</div>
+          <p>"${escapeHtml(rev.text)}"</p>
+          <div class="review-name">- ${escapeHtml(rev.name)}</div>
+          <small style="color:#b48c5c;">${rev.date}</small>
+        </div>
+      `;
+    });
+    container.innerHTML = html;
+  }
+
+  function addNewReview() {
+    const name = document.getElementById("reviewerName").value.trim();
+    const stars = parseInt(document.getElementById("reviewStars").value);
+    const text = document.getElementById("reviewText").value.trim();
+    if(!name || !text) {
+      alert("Please enter your name and review message.");
+      return;
+    }
+    const date = new Date().toLocaleDateString();
+    reviews.unshift({ name, stars, text, date });
+    if(reviews.length > 20) reviews = reviews.slice(0,20);
+    localStorage.setItem("janiceReviews", JSON.stringify(reviews));
+    renderReviews();
+    document.getElementById("reviewerName").value = "";
+    document.getElementById("reviewText").value = "";
+    document.getElementById("reviewStars").value = "5";
+    alert("Thank you for your review!");
+  }
+
+  window.onload = () => {
+    renderMenu();
+    loadCart();
+    loadReviews();
+    if(localStorage.getItem("custName")) document.getElementById("custName").value = localStorage.getItem("custName");
+    if(localStorage.getItem("custPhone")) document.getElementById("custPhone").value = localStorage.getItem("custPhone");
+    window.addItem = addItem; 
+    window.changeQty = changeQty; 
+    window.removeItemCompletely = removeItemCompletely;
+    window.toggleCart = toggleCart; 
+    window.checkoutWhatsApp = checkoutWhatsApp;
+    window.addNewReview = addNewReview;
+  };
+  
+  document.addEventListener("click", function(e) { 
+    let pop = document.getElementById("cartPopup"); 
+    let btn = document.querySelector(".cart-fixed"); 
+    if(pop && pop.style.display === "block" && !pop.contains(e.target) && !btn.contains(e.target)) 
+      pop.style.display = "none"; 
+  });
+</script>
+</body>
+</html>
